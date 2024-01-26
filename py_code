@@ -1,15 +1,9 @@
-
 import pandas as pd #biblioteca para manupulacao de dados
 from unidecode import unidecode #edicao de caracteres
 import matplotlib.pyplot as plt #plotagem de graficos
 import seaborn as sns #biblioteca com base no matplotlib com melhor design para plotagem
 import numpy as np #operacoes com array, validacoes cruzadas
 
-from sklearn.preprocessing import StandardScaler # Pré Processamento - biblioteca para normalizacao de caracteristicas/categorias
-from sklearn.preprocessing import MinMaxScaler # Pré Processamento - biblioteca para normalizacao de dados
-from sklearn.preprocessing import LabelEncoder # Pré Processamento - biblioteca para converter rotulos das categorias em rotulos numericos
-from sklearn.model_selection import train_test_split, cross_val_score # Bibliotecas Scikit-learn para ML, teste e treinamento e Biblioteca para realizar validacao cruzada nos modelos de ML
-from sklearn.metrics import classification_report, accuracy_score # Biblioteca Scikit-learn para ML, avaliacao dos modelos
 from sklearn.metrics import mean_squared_error, mean_absolute_error # Aplicação de metricas Mean Squared Error (MSE) e Mean Absolute Error (MAE)
 
 '''Dados de Julho de 2023'''
@@ -33,7 +27,7 @@ df23 = df23[~df23['UF'].isin(['Nao_Identificado', 'Nao_se_Aplica', 'Sem_Informac
 print(df23['UF'].unique())
 
 print(df23['Combustivel_Veiculo'].unique())
-#Remover acentos e trocar espa�os por "_" das linhas da coluna 'Combustivel_Veiculo'
+#Remover acentos e trocar espacos por "_" das linhas da coluna 'Combustivel_Veiculo'
 df23['Combustivel_Veiculo'] = df23['Combustivel_Veiculo'].apply(unidecode).str.replace(' ', '_')
 #Deletar dados da coluna 'Combustivel_Veiculo' sem identificacao de tipo de combustivel
 df23 = df23[~df23['Combustivel_Veiculo'].isin(['Nao_Identificado', 'Sem_Informacao', 'VIDE/CAMPO/OBSERVACAO'])]
@@ -54,7 +48,7 @@ df23['Combustivel_Veiculo'] = df23['Combustivel_Veiculo'].apply(lambda x: 'HIBRI
 df23['Combustivel_Veiculo'] = df23['Combustivel_Veiculo'].apply(lambda x: 'COMBUSTAO' if x in COMBUSTAO else x)
 df23['Combustivel_Veiculo'] = df23['Combustivel_Veiculo'].apply(lambda x: 'ELETRICO' if x in ELETRICO else x)
 print(df23['Combustivel_Veiculo'].unique())
-#Para melhorar a visualizacao e evitar a repeticao dos nomes dos combustiveis, o agrupamento sera feito atraves do comando groupby() com somatoria dos valores
+# Para melhorar a visualizacao e evitar a repeticao dos nomes dos combustiveis, o agrupamento sera feito atraves do comando groupby() com somatoria dos valores
 df23 = df23.groupby(['UF', 'Municipio', 'Combustivel_Veiculo']).sum().reset_index()
 
 #df23.to_csv('df23_tratado.csv', index=False) #criar novo arquivo do dataframe
@@ -63,7 +57,9 @@ print(df23)
 ''' Dados de Julho de 2022'''
 
 df22 = pd.read_csv("d_frota_por_uf_municipio_combustivel_julho_2022.csv",
-                         encoding = "UTF-8", sep = ";", usecols = ["UF",'Municipio',"Combustivel Veiculo","Qtd. Veiculos"])
+                         encoding = "UTF-8", sep = ";")
+
+print(df22.info()) #Qtd de entradas de dados 
 
 # Substituir espacos (onde houver) dos titulos das colunas por "_"
 df22.columns = df22.columns.str.replace(' ', '_')
@@ -93,7 +89,9 @@ print(df22)
 
 # Carregar os dados
 df21 = pd.read_csv("d_frota_por_uf_municipio_combustivel_julho_2021.csv",
-                   encoding="UTF-8", sep=";", usecols = ["UF",'Municipio',"Combustivel Veiculo","Qtd. Veiculos"])
+                   encoding="UTF-8", sep=";")
+
+print(df21.info()) #Qtd de entradas de dados  
 
 # Substituir espacos (onde houver) dos titulos das colunas por "_"
 df21.columns = df21.columns.str.replace(' ', '_')
@@ -123,7 +121,9 @@ print(df21)
 '''Dados de Julho de 2020'''
 
 df20 = pd.read_csv("d_frota_por_uf_municipio_combustivel_julho_2020.csv",
-                   encoding="UTF-8", sep=";", usecols = ["UF",'Municipio',"Combustivel Veiculo","Qtd. Veiculos"])
+                   encoding="UTF-8", sep=";")
+
+print(df20.info()) #Qtd de entradas de dados 
 
 # Substituir espacos dos titulos das colunas por "_"
 df20.columns = df20.columns.str.replace(' ', '_')
@@ -146,7 +146,9 @@ print(df20)
 '''Dados de Julho de 2019'''
 
 df19 = pd.read_csv("d_frota_por_uf_municipio_combustivel_julho_2019.csv",
-                   encoding="UTF-8", sep=";", usecols = ["UF",'Municipio',"Combustivel Veiculo","Qtd. Veiculos"])
+                   encoding="UTF-8", sep=";")
+
+print(df19.info()) #Qtd de entradas de dados 
 
 # Substituir espacos dos titulos das colunas por "_"
 df19.columns = df19.columns.str.replace(' ', '_')
@@ -170,16 +172,13 @@ df19 = df19.groupby(['UF', 'Municipio', 'Combustivel_Veiculo']).sum().reset_inde
 
 print(df19)
 
-'''Dados de Julho de 2018'''
-
-import pandas as pd
-from unidecode import unidecode
-
 ''' Dados de Julho de 2018'''
 
 # Carregar os dados
 df18 = pd.read_csv("d_frota_por_uf_municipio_combustivel_julho_2018.csv",
-                   encoding="UTF-8", sep=";", usecols=["UF", 'Municipio', "Combustivel Veiculo", "Qtd. Veiculos"])
+                   encoding="UTF-8", sep=";")
+
+print(df18.info()) #Qtd de entradas de dados = 
 
 # Substituir espacos (onde houver) dos titulos das colunas por "_"
 df18.columns = df18.columns.str.replace(' ', '_')
@@ -205,6 +204,7 @@ print(df18)
 
 '''Analise e plotagem de graficos - Crescimento Anual de 2020 a 2023'''
 
+#Atribuindo dado "Ano" a cada dataframe
 df20['Ano'] = 2020
 df21['Ano'] = 2021
 df22['Ano'] = 2022
@@ -216,7 +216,7 @@ df_combinados = pd.concat([df20, df21, df22, df23])
 # Agrupamento por ano, tipo de combustivel e soma da quantidade de veiculos 
 dados_anuais = df_combinados.groupby(['Ano', 'Combustivel_Veiculo'])['Qtd._Veiculos'].sum().reset_index()
 
-# Filtrando somente por Hibridos e Eletricos
+# Filtrando somente por Eletrificados
 eletrificados_ano = dados_anuais[dados_anuais['Combustivel_Veiculo'].isin(['CELULA_COMBUSTIVEL','HIBRIDO', 'HIBRIDO_PLUG-IN', 'ELETRICO'])]
 
 # Escolhendo o estilo/cor do grafico
@@ -253,7 +253,8 @@ siglas_UF = {
     'PARAIBA': 'PB', 'PARANA': 'PR', 'PERNAMBUCO': 'PE', 'PIAUI': 'PI', 'RIO_DE_JANEIRO': 'RJ', 
     'RIO_GRANDE_DO_NORTE': 'RN', 'RIO_GRANDE_DO_SUL': 'RS', 'RONDONIA': 'RO', 'RORAIMA': 'RR', 
     'SANTA_CATARINA': 'SC', 'SAO_PAULO': 'SP', 'SERGIPE': 'SE', 'TOCANTINS': 'TO'
-}  # trocando nomes dos estados por siglas
+}  
+# trocando nomes dos estados por siglas
 eletrificados_estados2['UF'] = eletrificados_estados2['UF'].map(siglas_UF).fillna(eletrificados_estados2['UF']) #incluindo no novo DF
 
 # Escolhendo estilo/cor do grafico com o seaborn
@@ -277,33 +278,33 @@ plt.show()
 '''Analise e plotagem de graficos - Relacao entre os tipos veiculos eletrificados'''
 
 # Criando dicionario para armazenar os dados
-dadosEV = {'Ano': [], 'CELULA_COMBUSTIVEL': [], 'HIBRIDO': [], 'HIBRIDO_PLUG_IN': [], 'ELETRICO': []}
+dadosEV = {'Ano': [], 'ELETRICO': [], 'HIBRIDO': [], 'HIBRIDO_PLUG_IN': [], 'CELULA_COMBUSTIVEL': []}
 
 for Ano, df in zip(range(2018, 2024), [df18, df19, df20, df21, df22, df23]):
     # Calcular a quantidade de veiculos por tipo
-    cont_celula = df[df['Combustivel_Veiculo'] == 'CELULA_COMBUSTIVEL']['Qtd._Veiculos'].sum()
+    cont_eletrico = df[df['Combustivel_Veiculo'] == 'ELETRICO']['Qtd._Veiculos'].sum()
     cont_hibrido = df[df['Combustivel_Veiculo'] == 'HIBRIDO']['Qtd._Veiculos'].sum()
     cont_hibrido_plug_in = df[df['Combustivel_Veiculo'] == 'HIBRIDO_PLUG-IN']['Qtd._Veiculos'].sum()
-    cont_eletrico = df[df['Combustivel_Veiculo'] == 'ELETRICO']['Qtd._Veiculos'].sum()
+    cont_celula = df[df['Combustivel_Veiculo'] == 'CELULA_COMBUSTIVEL']['Qtd._Veiculos'].sum()
 
     # Armazenar os dados
     dadosEV['Ano'].append(Ano)
-    dadosEV['CELULA_COMBUSTIVEL'].append(cont_celula)
+    dadosEV['ELETRICO'].append(cont_eletrico)
     dadosEV['HIBRIDO'].append(cont_hibrido)
     dadosEV['HIBRIDO_PLUG_IN'].append(cont_hibrido_plug_in)
-    dadosEV['ELETRICO'].append(cont_eletrico)
+    dadosEV['CELULA_COMBUSTIVEL'].append(cont_celula)
 
 # Converter para DataFrame
 df_comparacao = pd.DataFrame(dadosEV)
 
 # Calcular o total de veículos eletrificados por ano
-df_comparacao['Total'] = df_comparacao[['CELULA_COMBUSTIVEL', 'HIBRIDO', 'HIBRIDO_PLUG_IN', 'ELETRICO']].sum(axis=1)
+df_comparacao['Total'] = df_comparacao[[ 'ELETRICO', 'HIBRIDO', 'HIBRIDO_PLUG_IN','CELULA_COMBUSTIVEL']].sum(axis=1)
 
 # Calcular as proporções percentuais de cada tipo de veículo
-df_comparacao['CELULA_COMBUSTIVEL_Pct'] = (df_comparacao['CELULA_COMBUSTIVEL'] / df_comparacao['Total']) * 100
+df_comparacao['ELETRICO_Pct'] = (df_comparacao['ELETRICO'] / df_comparacao['Total']) * 100
 df_comparacao['HIBRIDO_Pct'] = (df_comparacao['HIBRIDO'] / df_comparacao['Total']) * 100
 df_comparacao['HIBRIDO_PLUG_IN_Pct'] = (df_comparacao['HIBRIDO_PLUG_IN'] / df_comparacao['Total']) * 100
-df_comparacao['ELETRICO_Pct'] = (df_comparacao['ELETRICO'] / df_comparacao['Total']) * 100
+df_comparacao['CELULA_COMBUSTIVEL_Pct'] = (df_comparacao['CELULA_COMBUSTIVEL'] / df_comparacao['Total']) * 100
 
 # Plotando o gráfico de proporções
 plt.figure(figsize=(12, 6))
@@ -311,8 +312,9 @@ plt.figure(figsize=(12, 6))
 # variavel para medir a posicao, pois sera um grafico de barras empilhado
 bottom = [0] * len(df_comparacao) 
 # definção da estetica do grafico
+
 for col, color, label in zip(['CELULA_COMBUSTIVEL_Pct', 'HIBRIDO_Pct', 'HIBRIDO_PLUG_IN_Pct', 'ELETRICO_Pct'], 
-                             ['blue', 'green', 'purple', 'orange'], 
+                             plt.cm.Set1.colors, 
                              ['Célula de Combustível', 'Híbrido', 'Híbrido Plug-In', 'Elétrico']):
     plt.bar(df_comparacao['Ano'], df_comparacao[col], bottom=bottom, color=color, label=label)
     
@@ -339,10 +341,10 @@ plt.show()
 # Filtrar o DataFrame para incluir apenas veículos eletrificados
 df_eletrificados = df23[df23['Combustivel_Veiculo'].isin(['HIBRIDO', 'HIBRIDO_PLUG_IN', 'ELETRICO','CELULA_COMBUSTIVEL'])]
 
-# Agrupar por município e somar a quantidade de veículos
+# Agrupar por município e somar a quantidade de veículos, ordenar os municípios em ordem descrescente e selecionar os 10 primeiros
 soma_veiculos_por_municipio = df_eletrificados.groupby('Municipio')['Qtd._Veiculos'].sum().sort_values(ascending=False).head(10)
 
-# Ordenar os municípios pela quantidade de veículos e selecionar os 10 primeiros
+# Converter serie "soma_veiculos_por_municipio" em um dataframe, e resetar índice para que Municipio se torne uma coluna
 top_10_municipios = soma_veiculos_por_municipio.reset_index()
 
 # Adicionando uma coluna 'ID', somente para usar no eixo x, já que os nomes dos municipios serao mostrados somente no quadro da legenda
@@ -370,7 +372,165 @@ for p in ax.patches:
     
 plt.show() # Mostrar o grafico
 
-'''PREPARACAO DOS DADOS - PREVISAO DE FROTA DE ELETRIFICADOS PARA OS PROXIMOS ANOS'''
+'''Analise e plotagem de graficos - Mapa de Calor de veiculos eletrificados no Brasil em 2023'''
+
+import geopandas as gpd #biblioteca geopandas para lidar com Shapefiles e plotar os mapas de calor do mapa do Brasil
+
+# Filtrar para veículos eletrificados
+veiculos_eletrificados = ['ELETRICO', 'HIBRIDO', 'HIBRIDO_PLUG_IN', 'CELULA_COMBUSTIVEL']
+df_eletrificados = df23[df23['Combustivel_Veiculo'].isin(veiculos_eletrificados)]
+
+# Agregar dados por estado
+df_eletrificados_por_estado = df_eletrificados.groupby('UF')['Qtd._Veiculos'].sum().reset_index()
+
+# Como o Shapefile está identificando os estados por sigle, os nomes dos estados serão mapeados para as siglas correspondentes
+mapeamento_nomes_para_siglas = {
+    'ACRE': 'AC', 'ALAGOAS': 'AL', 'AMAPA': 'AP', 'AMAZONAS': 'AM', 'BAHIA': 'BA', 
+    'CEARA': 'CE', 'DISTRITO_FEDERAL': 'DF', 'ESPIRITO_SANTO': 'ES', 'GOIAS': 'GO', 
+    'MARANHAO': 'MA', 'MATO_GROSSO': 'MT', 'MATO_GROSSO_DO_SUL': 'MS', 
+    'MINAS_GERAIS': 'MG', 'PARA': 'PA', 'PARAIBA': 'PB', 'PARANA': 'PR', 
+    'PERNAMBUCO': 'PE', 'PIAUI': 'PI', 'RIO_DE_JANEIRO': 'RJ', 
+    'RIO_GRANDE_DO_NORTE': 'RN', 'RIO_GRANDE_DO_SUL': 'RS', 'RONDONIA': 'RO', 
+    'RORAIMA': 'RR', 'SANTA_CATARINA': 'SC', 'SAO_PAULO': 'SP', 'SERGIPE': 'SE', 
+    'TOCANTINS': 'TO'
+}
+df_eletrificados_por_estado['UF'] = df_eletrificados_por_estado['UF'].map(mapeamento_nomes_para_siglas)
+
+# Carregar os dados geográficos dos estados brasileiros
+gdf_estados = gpd.read_file('BR_UF_2021.shp')
+
+# Realizar a junção dos dados geográficos com os dados de veículos eletrificados
+gdf_estados_veiculos = gdf_estados.set_index('SIGLA').join(df_eletrificados_por_estado.set_index('UF'))
+
+# Plotar o mapa de calor, escolhendo tamanho, gradiente de cores (viridis) e adicionando legendas
+fig, ax = plt.subplots(1, 1, figsize=(10, 8))
+gdf_estados_veiculos.plot(column='Qtd._Veiculos', cmap='viridis', ax=ax, legend=True,
+                          legend_kwds={'label': "Quantidade de Veículos Eletrificados em 2023 por Estado",
+                                       'orientation': "horizontal"})
+ax.set_xticks([]) # Como é um mapa de calor, ocultando valores de x do shapefile no plot
+ax.set_yticks([]) # Ocultando valores de y do shapefile no plot
+plt.title('Distribuição de Veículos Eletrificados por Estado no Brasil em Junho de 2023') # titulo do gráfico
+plt.show() # Exibir
+
+### SERIES TEMPORAIS - MODELO DE REGRESSÃO LINEAR E POLINOMIAL
+### PREPARACAO DOS DADOS - PREVISAO DE FROTA DE ELETRIFICADOS PARA OS PROXIMOS ANOS
+
+# Concatenando os DataFrames de cada ano em um único DataFrame
+df_total = pd.concat([df18, df19, df20, df21, df22, df23])
+
+# Filtrar para veículos elétricos e híbridos e agrupar por ano
+df_filtrado = df_total[df_total['Combustivel_Veiculo'].isin(['HIBRIDO', 'HIBRIDO_PLUG_IN', 'ELETRICO', 'CELULA_COMBUSTIVEL'])]
+df_anual = df_filtrado.groupby('Ano')['Qtd._Veiculos'].sum().reset_index()  # Resetando o índice
+
+# Preparando os dados
+X = df_anual['Ano'].values.reshape(-1, 1)
+y = df_anual['Qtd._Veiculos'].values
+
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+
+# Modelo de Regressão Linear
+modelo_linear = LinearRegression()
+modelo_linear.fit(X, y)
+y_pred_linear = modelo_linear.predict(X)
+
+# Modelo de Regressão Polinomial
+grau_polynomial = 2  
+poly_features = PolynomialFeatures(degree=grau_polynomial)
+X_poly = poly_features.fit_transform(X)
+modelo_polynomial = LinearRegression()
+modelo_polynomial.fit(X_poly, y)
+y_pred_poly = modelo_polynomial.predict(X_poly)
+
+# Anos para os quais as previsões serão feitas
+anos_futuros = np.array([2024, 2025, 2026]).reshape(-1, 1)
+
+# Fazendo previsões com o modelo linear
+previsoes_linear = modelo_linear.predict(anos_futuros)
+
+# Preparando os dados para o modelo polinomial
+anos_futuros_poly = poly_features.transform(anos_futuros)
+
+# Fazendo previsões com o modelo polinomial
+previsoes_poly = modelo_polynomial.predict(anos_futuros_poly)
+
+# Exibir previsões
+print("Previsões de Regressão Linear para 2024, 2025 e 2026: ", previsoes_linear)
+print("Previsões de Regressão Polinomial para 2024, 2025 e 2026: ", previsoes_poly)
+
+# Plotando os resultados com previsões
+plt.figure(figsize=(10, 6))
+plt.plot(X, y, label='Dados Reais', marker='o')
+plt.plot(anos_futuros, previsoes_linear, label='Previsões Lineares', color='brown', marker='o')
+plt.title('Previsões de Veículos Eletrificados para 2024, 2025 e 2026 - Modelo de Regressão Linear')
+plt.xlabel('Ano')
+plt.ylabel('Quantidade de Veículos')
+plt.xticks(np.append(X, anos_futuros), rotation=45)  # Definindo os xticks
+plt.legend()
+plt.show()
+
+# Plotando os resultados com previsões
+plt.figure(figsize=(10, 6))
+plt.plot(X, y, label='Dados Reais', marker='o')
+plt.plot(anos_futuros, previsoes_poly, label='Previsões Polinomiais', color='green', marker='o')
+plt.title('Previsões de Veículos Eletrificados para 2024, 2025 e 2026 - Modelo Polinomial')
+plt.xlabel('Ano')
+plt.ylabel('Quantidade de Veículos')
+plt.xticks(np.append(X, anos_futuros), rotation=45)  # Definindo os xticks
+plt.legend()
+plt.show()
+
+from sklearn.model_selection import TimeSeriesSplit
+
+# Definir o número de splits
+tscv = TimeSeriesSplit(n_splits=3)
+
+# Listas para armazenar as métricas de cada modelo
+def mean_percentage_absolute_error(y_true, y_pred):
+    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+
+mse_linear_list, mae_linear_list, mpae_linear_list = [], [], []
+mse_poly_list, mae_poly_list, mpae_poly_list = [], [], []
+
+for train_index, test_index in tscv.split(X):
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+
+    # Modelo de Regressão Linear
+    modelo_linear = LinearRegression()
+    modelo_linear.fit(X_train, y_train)
+    y_pred_linear = modelo_linear.predict(X_test)
+    mse_linear_list.append(mean_squared_error(y_test, y_pred_linear))
+    mae_linear_list.append(mean_absolute_error(y_test, y_pred_linear))
+    mpae_linear_list.append(mean_percentage_absolute_error(y_test, y_pred_linear))
+
+    # Modelo de Regressão Polinomial
+    X_train_poly = poly_features.fit_transform(X_train)
+    X_test_poly = poly_features.transform(X_test)
+    modelo_polynomial = LinearRegression()
+    modelo_polynomial.fit(X_train_poly, y_train)
+    y_pred_poly = modelo_polynomial.predict(X_test_poly)
+    mse_poly_list.append(mean_squared_error(y_test, y_pred_poly))
+    mae_poly_list.append(mean_absolute_error(y_test, y_pred_poly))
+    mpae_poly_list.append(mean_percentage_absolute_error(y_test, y_pred_poly))
+
+# Calcular a média das métricas
+mse_linear_media = np.mean(mse_linear_list)
+mae_linear_media = np.mean(mae_linear_list)
+mse_poly_media = np.mean(mse_poly_list)
+mae_poly_media = np.mean(mae_poly_list)
+mpae_linear_media = np.mean(mpae_linear_list) 
+mpae_poly_media = np.mean(mpae_poly_list)
+
+print(f'MSE Médio Modelo Linear: {mse_linear_media}')
+print(f'MAE Médio Modelo Linear: {mae_linear_media}')
+print(f'MSE Médio Modelo Polinomial: {mse_poly_media}')
+print(f'MAE Médio Modelo Polinomial: {mae_poly_media}')
+print(f'MPAE Médio Modelo Linear: {mpae_linear_media}')  
+print(f'MPAE Médio Modelo Polinomial: {mpae_poly_media}')  
+
+### SERIES TEMPORAIS - ARIMA - PREVISAO DE FROTA DE ELETRIFICADOS PARA OS PROXIMOS ANOS
+### PREPARACAO DOS DADOS - PREVISAO DE FROTA DE ELETRIFICADOS PARA OS PROXIMOS ANOS
 
 # Concatenando os DataFrames de cada ano em um único DataFrame
 df_total = pd.concat([df18, df19, df20, df21, df22, df23])
@@ -379,7 +539,6 @@ df_total = pd.concat([df18, df19, df20, df21, df22, df23])
 df_filtrado = df_total[df_total['Combustivel_Veiculo'].isin(['HIBRIDO', 'HIBRIDO_PLUG_IN', 'ELETRICO','CELULA_COMBUSTIVEL'])]
 df_anual = df_filtrado.groupby('Ano')['Qtd._Veiculos'].sum()
 
-'''SERIES TEMPORAIS - ARIMA - PREVISAO DE FROTA DE ELETRIFICADOS PARA OS PROXIMOS ANOS'''
 
 from statsmodels.tsa.arima.model import ARIMA # Importando ARIMA 
 from statsmodels.tsa.stattools import adfuller # Teste para verificar se os dados sao estacionarios 
@@ -391,11 +550,14 @@ model_fit = model.fit()
 # Fazer previsões para os próximos 3 anos, 3 steps
 previsoes = model_fit.forecast(steps=3)
 
+print("Previsões ARIMA:")
+print(previsoes)
+
 # Plotar as previsões
 plt.figure(figsize=(10, 6))
 plt.plot(df_anual.index, df_anual, label='Dados Históricos')
 plt.plot([2024, 2025, 2026], previsoes, label='Previsões ARIMA', color='red')
-plt.title('Previsão de Veículos Elétricos e Híbridos para 2024, 2025 e 2026')
+plt.title('Previsão de Veículos Eletrificados para 2024, 2025 e 2026')
 plt.xlabel('Ano')
 plt.ylabel('Quantidade de Veículos')
 plt.xticks(list(df_anual.index) + [2024, 2025, 2026])  # Adicionando anos nas previsões
@@ -407,14 +569,25 @@ for year, value in zip([2024, 2025, 2026], previsoes):
 plt.legend()
 plt.show()
 
-# Avaliar o Modelo, considerado que df_anual seja a série temporal de dados históricos
+# Avaliar o Modelo, df_anual = série temporal de dados históricos
 
 # Definindo um tamanho de "janela" para walk-forward validation
-window = 3  # Por exemplo, usar 3 anos para treinar e prever o próximo ano
+window = 3  # 3 anos para treinar e prever o próximo ano
+
+# Métrica MAPE
+def mean_absolute_percentage_error(y_true, y_pred):
+    # Evitar divisão por zero
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    non_zero_index = (y_true != 0)
+    
+    # Calcular MAPE somente para valores não-zero
+    return np.mean(np.abs((y_true[non_zero_index] - y_pred[non_zero_index]) / y_true[non_zero_index])) * 100
+
 
 # Listas para armazenar os resultados das métricas
 mse_values = [] # Mean Squared Error
 mae_values = [] # Mean Absolute Error
+mape_values = [] # Mean Absolute Percentage Error 
 
 for i in range(window, len(df_anual)):
     train = df_anual.iloc[:i]
@@ -430,13 +603,16 @@ for i in range(window, len(df_anual)):
     # Calcular e armazenar as métricas
     mse = mean_squared_error(test, predictions)
     mae = mean_absolute_error(test, predictions)
+    mape = mean_absolute_percentage_error(test, predictions)
     mse_values.append(mse)
     mae_values.append(mae)
+    mape_values.append(mape)
 
 # Exibir a média das métricas
-print(f"Média do MSE: {sum(mse_values) / len(mse_values)}") # 121706901.5165714
-print(f"Média do MAE: {sum(mae_values) / len(mae_values)}") # 11032.085093787638
-# 'Too few observations to estimate starting parameters%s'
+print(f"Média do MSE ARIMA: {sum(mse_values) / len(mse_values)}") # 121706901.5165714
+print(f"Média do MAE ARIMA: {sum(mae_values) / len(mae_values)}") # 11032.085093787638
+print(f"Média do MAPE ARIMA: {sum(mape_values) / len(mape_values)}") # 6.015904011183016
+# 'Too few observations to estimate starting parameters
 
 # Função para realizar e imprimir os resultados do teste ADF
 def testar_estacionariedade(serie):
@@ -453,34 +629,12 @@ def testar_estacionariedade(serie):
 testar_estacionariedade(df_anual)
 
 # Estatística ADF = 31.67, é muito maior que qualquer um dos valores críticos
-# p-valor =1, logo a série temporal provavelmente não é estacionária, realizar diferenciacao
-'''
-# Aplicar diferenciação
-df_anual_diferenciada = df_anual.diff().dropna()  # Usando diff() para diferenciar e dropna() para remover valores vazios/NaNs que surgem após a diferenciacao
-
-# Ajustar o modelo ARIMA com d=2
-model_diferenciado = ARIMA(df_anual, order=(1, 1, 1))
-model_fit_diferenciado = model_diferenciado.fit()
-
-# Reexecutando o Teste ADF na série diferenciada
-resultado_adf_diferenciado = adfuller(df_anual_diferenciada, autolag='AIC')
-print(f'Estatística ADF após diferenciação: {resultado_adf_diferenciado[0]}')
-print(f'p-valor após diferenciação: {resultado_adf_diferenciado[1]}')
-for key, value in resultado_adf_diferenciado[4].items():
-    print(f'Valor Crítico {key} após diferenciação: {value}')
-'''
-    # ValueError: sample size is too short to use selected regression component - Serie nao estacionaria, modelo inviavel após mais de uma diferenciacao
+# p-valor =1, logo a série temporal provavelmente não é estacionária, mesmo com 1 diferenciacao
 
 
+### SARIMA  - PREVISAO DE FROTA DE ELETRIFICADOS PARA OS PROXIMOS ANOS
 
-
-
-
-
-
-
-
-'''SARIMA  - PREVISAO DE FROTA DE ELETRIFICADOS PARA OS PROXIMOS ANOS'''
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 # Concatenando os DataFrames de cada ano em um único DataFrame
 df_total = pd.concat([df18, df19, df20, df21, df22, df23])
@@ -488,11 +642,6 @@ df_total = pd.concat([df18, df19, df20, df21, df22, df23])
 # Filtrar para veículos elétricos e híbridos e agrupar por ano
 df_filtrado = df_total[df_total['Combustivel_Veiculo'].isin(['HIBRIDO', 'HIBRIDO_PLUG_IN', 'ELETRICO','CELULA_COMBUSTIVEL'])]
 df_anual = df_filtrado.groupby('Ano')['Qtd._Veiculos'].sum()
-
-from statsmodels.tsa.statespace.sarimax import SARIMAX
-from math import sqrt
-
-# O SARIMA funciona bem com séries temporais que têm uma sazonalidade clara.
 
 # Dividir os dados em conjunto de treino e teste 
 train = df_anual.iloc[:-3]
@@ -503,23 +652,25 @@ test = df_anual.iloc[-3:]
 # Os valores P, D, Q, s são para a parte sazonal
 # P = olha para o valor da série temporal em uma temporada anterior para ajudar a prever o valor atual.
 # D = modelo aplica diferenciação sazonal
-# (por exemplo, a mudança entre este mês e o mesmo mês do ano anterior).
 # Q = modelo leva em conta quanto ele errou na última temporada ao fazer previsões para esta temporada.
 # SARIMAX(df_anual, order=(1, 1, 1), seasonal_order=(1, 1, 1, 12)), s = 12, pois a sazonalidade é anual (12 meses)
-sarima_model = SARIMAX(df_anual, order=(1, 1, 1), seasonal_order=(1, 0, 1, 12)) 
+sarima_model = SARIMAX(df_anual, order=(1, 1, 1), seasonal_order=(1, 0, 1, 12))
 # como observado no ARIMA, devido ao volume de dados, a diferenciacao sazonal (D=0) nao foi aplicada
 sarima_model_fit = sarima_model.fit()
 
 # Previsoes
 sarima_previsoes = sarima_model_fit.forecast(steps=len(test))
 
+print("Previsões SARIMA:")
+print(sarima_previsoes)
+
 # Plotar as previsões junto com os dados históricos
 plt.figure(figsize=(10, 6))
 plt.plot(df_anual.index, df_anual, label='Dados Históricos')
-plt.plot([2024, 2025, 2026], sarima_previsoes, label='Previsões SARIMA', color='red')
-plt.title('Previsões com Modelo SARIMA')
+plt.plot([2024, 2025, 2026], sarima_previsoes, label='Previsões SARIMA', color='orange')
+plt.title('Previsão de Veículos Eletrificados para 2024, 2025 e 2026')
 plt.xlabel('Ano')
-plt.ylabel('Quantidade de Veículos Elétricos e Híbridos')
+plt.ylabel('Quantidade de Veículos')
 plt.xticks(list(df_anual.index) + [2024, 2025, 2026])  # Adicionando anos nas previsões
 # Adicionar rótulos com os valores numéricos
 for year, value in zip(df_anual.index, df_anual):
@@ -529,8 +680,17 @@ for year, value in zip([2024, 2025, 2026], sarima_previsoes):
 plt.legend()
 plt.show()
 
+# Definicao da funcao para calculo do MAPE
+def mean_absolute_percentage_error(y_true, y_pred):
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    non_zero_index = (y_true != 0)
+    
+    return np.mean(np.abs((y_true[non_zero_index] - y_pred[non_zero_index]) / y_true[non_zero_index])) * 100
+
 # Etapa de validação cruzada
 mse_scores = []
+mae_scores = []
+mape_scores = []
 
 for t in range(1, len(df_anual) - 2):
     # Divisão em treino e teste
@@ -544,225 +704,112 @@ for t in range(1, len(df_anual) - 2):
     # Previsão
     pred = model_fit.forecast(steps=len(test))
     
-    # Calculando o MSE
+    # Calculando o MSE, MAE e MAPE para validação cruzada
     mse = mean_squared_error(test, pred)
+    mae = mean_absolute_error(test, pred)
+    mape = mean_absolute_percentage_error(test, pred)
     mse_scores.append(mse)
+    mae_scores.append(mae)
+    mape_scores.append(mape)
 
 # Calculando a média dos erros
 mean_mse = sum(mse_scores) / len(mse_scores)
-rmse = sqrt(mean_mse)
-
-print(f'Média do MSE: {mean_mse}')
-print(f'RMSE: {rmse}')
-
-
-
-
-# Too few observations to estimate starting parameters%s.
-# Testar com tensorflow simples (x), depois com Regressão Linear, random forest ou gradient boosting regressor 
-
-
-
-from fbprophet import Prophet
-
-# Preparando os dados para o Prophet
-df_prophet = pd.DataFrame({'ds': df_anual.index, 'y': df_anual.values})
-
-# Inicializando e treinando o modelo Prophet
-model_prophet = Prophet(yearly_seasonality=True, daily_seasonality=False)
-model_prophet.fit(df_prophet)
-
-# Criando um DataFrame futuro para previsões
-future = model_prophet.make_future_dataframe(periods=3, freq='Y')
-
-# Fazendo previsões
-forecast = model_prophet.predict(future)
-
-# Extraindo as previsões para 2024, 2025 e 2026
-previsoes_prophet = forecast[forecast['ds'].dt.year >= 2024][['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
-
-# Plotando as previsões
-fig1 = model_prophet.plot(forecast)
-
-
-
-
-
-
-
-'''PREPARACAO DOS DADOS - CLASSIFICACAO QUATIDADE DE ELETRIFICADOS NOS ESTADOS COM MACHINE LEARNING'''
-
-# Filtrando o DataFrame para veículos Eletrificados
-df_eletricos_hibridos = df23[df23['Combustivel_Veiculo'].isin(['HIBRIDO', 'HIBRIDO_PLUG_IN', 'ELETRICO','CELULA_COMBUSTIVEL'])]
-
-# Agrupando por UF e somando a quantidade de veículos
-soma_veiculos_por_uf = df_eletricos_hibridos.groupby('UF')['Qtd._Veiculos'].sum()
-
-# Convertendo a série em DataFrame
-df_uf = soma_veiculos_por_uf.reset_index()
-
-# Categorizando em faixas (baixa, média, alta)
-df_uf['Categoria'] = pd.qcut(df_uf['Qtd._Veiculos'], 3, labels=['baixa', 'media', 'alta'])
-
-# Codificando a variável categórica 'UF'
-le_uf = LabelEncoder()
-df_uf['UF_encoded'] = le_uf.fit_transform(df_uf['UF'])
-
-# Codificando a variável alvo 'Categoria'
-le_categoria = LabelEncoder()
-df_uf['Categoria_encoded'] = le_categoria.fit_transform(df_uf['Categoria'])
-
-# Divisão em Conjuntos de Treino e Teste
-X = df_uf[['UF_encoded']]  # Características
-y = df_uf['Categoria_encoded']  # Variável alvo codificada
-
-'''MACHINE LEARNING - RANDOM FOREST'''
-
-from sklearn.ensemble import RandomForestClassifier # Modelo Random Forest para classificacao
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-# Construir e Treinar o Modelo
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-
-# Avaliar o modelo ccom report
-y_pred = model.predict(X_test)
-print(classification_report(y_test, y_pred)) # Accuracy = 0.44, 44% das previsões totais foram corretas
-
-# Realizar previsões para todo o conjunto de dados
-y_pred = model.predict(df_uf[['UF_encoded']])
-
-# Converter as previsões de volta para os rótulos originais para impromir as classificacoes
-df_uf['Predicao'] = le_categoria.inverse_transform(y_pred)
-
-# Imprimir a classificação de cada UF
-for uf, categoria in zip(df_uf['UF'], df_uf['Predicao']):
-    print(f"UF: {uf}, Categoria Predita: {categoria}")
-
-# Aplicar a validação cruzada
-scores = cross_val_score(model, X, y, cv=5, scoring='accuracy')  # cv=5 para 5-fold
-print("Acurácias da Validação Cruzada - Random Forest:", scores) # Imprimir validacao cruzada 5fold  [0.5 0.5 0.2 0.2 0.2]
-print("Média das Acurácias - Random Forest:", scores.mean()) # Imprimir media das precisoes: 0.31999999999999995
-
-'''MACHINE LEARNING - SUPPORT VECTOR MACHINE (SVM)'''
-
-from sklearn.svm import SVC # Importando modelo Support Vector Machine
-
-# Utilizando os dados ja preparados na primeira classificacao com Random Forest
-
-# Normalizacao das caracteristicas
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)  # Normalizando as características
-
-# Divisao dos Dados em Treino e Teste
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=42)
-
-# Construcao, ajuste de hiperparametros e treinamento do modelo SVM
-svm_model = SVC(kernel='rbf', C=1, gamma='auto')  # RBF (Radial Basis Function) Kernel escolhido pois costuma funcionar para a maioria das aplicacoes
-# Parâmetro de regularização C=1:  Valores maiores levam a menor regularização.
-# gamma='auto': Coeficiente para o kernel RBF.
-svm_model.fit(X_train, y_train) # treinamento
-
-# Fazer previsões no conjunto de teste
-y_pred = svm_model.predict(X_test)
-
-# Avaliar o modelo
-print(classification_report(y_test, y_pred)) # Accuracy = 0.44, 44% das previsões totais foram corretas
-
-# Realizar previsões para todo o conjunto de dados
-y_pred = svm_model.predict(X_scaled)
-
-# Adicionar as previsões ao DataFrame
-df_uf['Predicao'] = le_categoria.inverse_transform(y_pred)  # Certifique-se de que 'le_categoria' é o LabelEncoder para a variável alvo
-
-# Imprimir a classificação de cada UF
-for uf, categoria in zip(df_uf['UF'], df_uf['Predicao']):
-    print(f"UF: {uf}, Categoria Predita: {categoria}")
-
-# Etapa de validacao cruzada
-svm_scores = cross_val_score(svm_model, X, y, cv=5, scoring='accuracy')
-print("Acurácias da Validação Cruzada SVM:", svm_scores) # Imprimir validacao cruzada 5fold: [0.33333333  0.5  0.2  0.2  0.2]
-print("Acurácia Média SVM:", svm_scores.mean()) # Imprimir media das precisoes: 0.2866666666666666
-
-'''MACHINE LEARNING - K-Nearest Neighbors (KNN)'''
-
-from sklearn.neighbors import KNeighborsClassifier # Importando Classificador KNN
-
-# Utilizando os dados ja preparados na primeira classificacao com Random Forest
-
-# Normalizar as características
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)  # Normalizando as características
-
-# Divisao dos Dados em Treino e Teste
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=42)
-
-# Construcao e Treinamento do Modelo KNN
-knn_model = KNeighborsClassifier(n_neighbors=5)
-knn_model.fit(X_train, y_train)
-
-# Fazer previsões no conjunto de teste
-y_pred = knn_model.predict(X_test)
-
-# Avaliar o modelo
-print(classification_report(y_test, y_pred)) # Accuracy = 0.44, 44% das previsões totais foram corretas
-
-# Realizar previsões para todo o conjunto de dados
-y_pred = knn_model.predict(X_scaled)
-
-# Adicionar as previsões ao DataFrame
-df_uf['Predicao'] = le_categoria.inverse_transform(y_pred)
-
-# Imprimir a classificação de cada UF
-for uf, categoria in zip(df_uf['UF'], df_uf['Predicao']):
-    print(f"UF: {uf}, Categoria Predita: {categoria}")
-
-# Etapa de validacao cruzada
-knn_scores = cross_val_score(knn_model, X, y, cv=5, scoring='accuracy')
-print("Acurácias da Validação Cruzada KNN:", knn_scores) # Imprimir validacao cruzada 5fold: [0.5  0.33333333  0.2  0.4  0.2]
-print("Acurácia Média KNN:", knn_scores.mean()) # Imprimir media das precisoes: 0.3266666666666666
-
-'''MACHINE LEARNING - REDES NEURAIS - TENSORFLOW'''
-'''
-from tensorflow.keras.models import Sequential # Importando modelo Sequencial do Tensorflow, para rede neural simples e direta
-from tensorflow.keras.layers import Dense # Camada densamente conectada
-from tensorflow.keras.utils import to_categorical # converter vetores de inteiros em uma representação binária, classificacao dos estados em categorias destintas
-
-# Utilizando os dados ja preparados na primeira classificacao com Random Forest
-
-# Normalizar as características
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-# Converter a variável alvo para representação categórica
-y_train_categorical = to_categorical(y_train)
-y_test_categorical = to_categorical(y_test)
-
-# Criar o modelo
-tf_model = Sequential()
-tf_model.add(Dense(10, input_dim=X_train_scaled.shape[1], activation='relu'))  # Camada de entrada
-tf_model.add(Dense(10, activation='relu'))  # Camada oculta
-tf_model.add(Dense(y_train_categorical.shape[1], activation='softmax'))  # Camada de saída
-
-# Compilar o modelo com otimizador atualizado
-tf_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-# Treinar o modelo
-tf_model.fit(X_train_scaled, y_train_categorical, epochs=100, batch_size=10)
-
-# Avaliar o modelo
-loss, accuracy = tf_model.evaluate(X_test_scaled, y_test_categorical)
-print(f"Acurácia: {accuracy}") # Acurácia: 0.2222222238779068
-
-# Fazer previsões
-#y_pred = tf_model.predict(X_test_scaled)
-
-# Converter previsões para rótulos
-#y_pred_labels = le_categoria.inverse_transform(y_pred.argmax(axis=1))
-
-# Imprimir a classificação de cada UF
-#for uf, pred in zip(le_uf.inverse_transform(X_test['UF_encoded']), y_pred_labels):
-#    print(f"UF: {uf}, Categoria Predita: {pred}")
-'''
+mean_mae = sum(mae_scores) / len(mae_scores)
+mean_mape = sum(mape_scores) / len(mape_scores)
+
+print(f'Média do MSE SARIMA: {mean_mse}') # Média do MSE: 853866841.0
+print(f'Média do MAE SARIMA: {mean_mae}') # Média do MAE: 29221.0 
+print(f'Média do MAPE SARIMA: {mean_mape}') # Média do MAPE: 44.88770776367937
+
+### Facebook Prophet  - PREVISAO DE FROTA DE ELETRIFICADOS PARA OS PROXIMOS ANOS
+
+from prophet import Prophet # biblioteca Facebook Prophet
+import matplotlib.dates as mdates # Biblioteca para alteração do formato das datas no plot
+
+# Concatenando os DataFrames de cada ano em um único DataFrame
+df_total = pd.concat([df18, df19, df20, df21, df22, df23])
+
+# Filtrar para veículos elétricos e híbridos e agrupar por ano
+df_filtrado = df_total[df_total['Combustivel_Veiculo'].isin(['HIBRIDO', 'HIBRIDO_PLUG_IN', 'ELETRICO','CELULA_COMBUSTIVEL'])]
+df_anual = df_filtrado.groupby('Ano')['Qtd._Veiculos'].sum()
+
+# Primeiro, preparando os dados para o formato que o Prophet espera
+df_prophet = df_anual.reset_index()
+df_prophet.columns = ['ds', 'y']
+df_prophet['ds'] = pd.to_datetime(df_prophet['ds'], format='%Y') + pd.offsets.YearBegin(0)  # padronizando as datas para o início do ano para evitar previsões no mesmo ano 
+
+# Instanciando e ajustando o modelo do Prophet
+model = Prophet(yearly_seasonality=True, daily_seasonality=False)
+model.fit(df_prophet)
+
+# Criando um DataFrame futuro para as previsões
+futuro = model.make_future_dataframe(periods=4, freq='Y')
+futuro['ds'] = futuro['ds'].dt.to_period('Y').dt.to_timestamp()
+
+# Fazendo as previsões
+previsao = model.predict(futuro)
+print(previsao)
+
+# Filtrando as previsões para os anos de interesse (2024, 2025, 2026) e exibir
+previsao_filtrado = previsao[(previsao['ds'].dt.year >= 2024) & (previsao['ds'].dt.year <= 2026)][['ds', 'yhat']]
+print(previsao_filtrado)
+
+# Filtrando somente as previsões para usar no gráfico
+previsao_plot = previsao[previsao['ds'].dt.year >= 2024]
+
+# o Prophet gera o nome das legendas automaticamente, por padrão, em inglês
+# Plotando as previsões manualmente e alterando os nomes das legendas
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(previsao_plot['ds'], previsao_plot['yhat'], color='red', label='Previsão', marker='x')
+ax.fill_between(previsao_plot['ds'], previsao_plot['yhat_lower'], previsao_plot['yhat_upper'], color='gray', alpha=0.5, label='Limite de Confiança')
+ax.plot(df_prophet['ds'], df_prophet['y'], label='Dados Reais', color='blue', marker='o')
+
+# Adicionando título e rótulos personalizados ao gráfico
+plt.title('Previsões de Veículos Híbridos e Elétricos para 2024, 2025 e 2026')
+plt.xlabel('Ano')
+plt.ylabel('Quantidade de Veículos')
+plt.legend() # Mostrar legenda
+plt.show() # Exibir o gráfico
+
+# Avaliando o modelo, etapa de validação cruzada:
+from prophet.diagnostics import cross_validation, performance_metrics
+
+# Ajustando o modelo
+model = Prophet(yearly_seasonality=True)
+model.fit(df_prophet)
+
+# Definindo os parâmetros para a validação cruzada
+# horizon: até quanto tempo no futuro queremos prever
+# initial: tamanho da janela inicial de treinamento
+# period: frequência com que são feitos os cortes transversais
+df_cv = cross_validation(model, horizon='365 days', period='180 days', initial='730 days')
+
+# Calculando métricas de desempenho
+df_p = performance_metrics(df_cv)
+
+# Exibindo as métricas
+print(df_p) #mae = 24905.2, MAPE = 13,58%
+
+### RESUTLADOS DAS PREVISÕES ###
+
+# Médias das acurácias anotadas de cada modelo
+MAE = {
+    'Modelo': ['Regressão Linear', 'Polinomial', 'ARIMA', 'SARIMA', 'Prophet'],
+    'MAE': [27745, 18030, 11032, 29221, 24905]
+}
+
+# Convertendo em um DataFrame
+df_mae = pd.DataFrame(MAE)
+
+# Criando o gráfico de barras com Seaborn
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Modelo', y='MAE', data=df_mae, palette='pastel')
+
+# Adicionando títulos e rótulos
+plt.title('Erro absoluto médio (MAE) dos Modelos de Séries Temporais')
+plt.xlabel('Modelos')
+plt.ylabel('MAE')
+plt.xticks(rotation=45)  # Rotação dos nomes dos modelos para melhor leitura
+
+# Exibindo o gráfico
+plt.show()
